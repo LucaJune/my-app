@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./layout";
 import Detail from "./list/detail";
+import ShoppingList from "./list/list";
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-          <Route index element={<Detail />} />
+            <Route index element={<ShoppingList />} />
+            <Route path="/DetailList" element={<Detail />} />
           </Route>
         </Routes>
       </BrowserRouter>

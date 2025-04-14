@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import './detail.css'; // Importujeme stejné CSS
+import './detail.css';
 
 function ListNameForm({ currentName, onSave, onClose }) {
   const [name, setName] = useState(currentName);

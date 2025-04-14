@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.list-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-list {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-list input {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.add-icon {
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 24px;
+  color: #0b6d5c;
+  font-family: 'Poppins', sans-serif;
+  margin: 20px 0;
+}
+
+.lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.list-tile {
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 200px;
+  border-radius: 10px;
+  background-color: #308775;
+  color: #0b6d5c;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+}
+
+.list-tile.archived {
+  background-color: #FFA500; /* Oranžová barva */
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-name {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #0b6d5c;
+}
+
+.list-items {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.list-items.archived {
+  list-style-type: none;
+}
+
+.list-items li {
+  margin-bottom: 5px;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+
+.remove-icon, .archive-icon {
+  cursor: pointer;
+}
+
+.show-archived-button {
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: #308775;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.arrow-icon {
+  margin-left: 5px;
+}
+
+.check-icon {
+  color: #0b6d5c;
+  margin-right: 5px;
+}

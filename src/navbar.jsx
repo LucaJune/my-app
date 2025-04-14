@@ -42,14 +42,6 @@ function NavBar() {
             >
               Home
             </Nav.Link>
-            <Nav.Link
-              onClick={() => navigate("shoppingArchive")}
-              active={window.location.pathname === "/shoppingArchive"}
-              eventKey="shoppingArchive"
-              className="nav-link"
-            >
-              Archive
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
