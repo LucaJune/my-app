@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./list.css";
 import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp, FaCheck } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ListDeleteDialog from "./list-delete.jsx"; // Import modálního okna
 
 const List = () => {
   const [myLists, setMyLists] = useState([
@@ -9,20 +10,22 @@ const List = () => {
     { id: 2, name: "Shopping List 2", items: ["bread", "cheese", "butter"] },
     { id: 3, name: "Shopping List 3", items: ["apples", "bananas", "oranges"] },
   ]);
-  const [sharedLists, setSharedLists] = useState([
+  const [sharedLists] = useState([
     { id: 4, name: "Shared List 1", items: ["chicken", "fish", "beef"] },
   ]);
   const [archivedMyLists, setArchivedMyLists] = useState([
     { id: 5, name: "Archived My List 1", items: ["pasta", "rice", "beans"] },
     { id: 6, name: "Archived My List 2", items: ["tomatoes", "cucumbers", "lettuce"] },
   ]);
-  const [archivedSharedLists, setArchivedSharedLists] = useState([
+  const [archivedSharedLists] = useState([
     { id: 7, name: "Archived Shared List 1", items: ["soda", "juice", "water"] },
     { id: 8, name: "Archived Shared List 2", items: ["chips", "cookies", "candy"] },
     { id: 9, name: "Archived Shared List 3", items: ["flour", "sugar", "salt"] },
   ]);
   const [newListName, setNewListName] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [listToDelete, setListToDelete] = useState(null);
 
   const handleListRemove = (id) => {
     const newLists = myLists.filter(list => list.id !== id);
@@ -43,6 +46,15 @@ const List = () => {
     }
   };
 
+  const handleDeleteClick = (list) => {
+    setListToDelete(list);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDelete = async (id) => {
+    handleListRemove(id);
+  };
+
   return (
     <div className="list-container">
       <div className="add-list">
@@ -54,14 +66,14 @@ const List = () => {
         />
         <FaPlus className="add-icon" onClick={handleListAdd} />
       </div>
-      <h1 className="section-title">My shopping lists</h1>
+      <h1 className="section-title">MY SHOPPING LISTS</h1>
       <div className="lists">
         {myLists.map((list) => (
           <div key={list.id} className="list-tile">
             <div className="list-header">
               <h2 className="list-name">{list.name}</h2>
               <div className="icons">
-                <FaTrash className="remove-icon" onClick={() => handleListRemove(list.id)} />
+                <FaTrash className="remove-icon" onClick={() => handleDeleteClick(list)} />
                 <FaArchive className="archive-icon" onClick={() => handleListArchive(list.id)} />
               </div>
             </div>
@@ -70,19 +82,23 @@ const List = () => {
                 <li key={index}>{item}</li>
               ))}
             </ul>
+            <small className="view-detail">View detail</small>
           </div>
         ))}
       </div>
-      <h1 className="section-title">Shared shopping lists</h1>
+      <h1 className="section-title">SHARED SHOPPING LISTS</h1>
       <div className="lists">
         {sharedLists.map((list) => (
           <div key={list.id} className="list-tile">
-            <h2 className="list-name">{list.name}</h2>
+            <div className="list-header">
+              <h2 className="list-name">{list.name}</h2>
+            </div>
             <ul className="list-items">
               {list.items.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
             </ul>
+            <small className="view-detail">View detail</small>
           </div>
         ))}
       </div>
@@ -91,36 +107,47 @@ const List = () => {
       </button>
       {showArchived && (
         <>
-          <h1 className="section-title">My archived shopping lists</h1>
+          <h1 className="section-title">MY ARCHIVED SHOPPING LISTS</h1>
           <div className="lists">
             {archivedMyLists.map((list) => (
               <div key={list.id} className="list-tile archived">
                 <div className="list-header">
-                  <h2 className="list-name">{list.name}</h2>
-                  <FaTrash className="remove-icon" onClick={() => handleListRemove(list.id)} />
+                  <h2 className="list-name archived-name">{list.name}</h2>
+                  <FaTrash className="remove-icon" onClick={() => handleDeleteClick(list)} />
                 </div>
                 <ul className="list-items archived">
                   {list.items.map((item, index) => (
-                    <li key={index}><FaCheck className="check-icon" /> {item}</li>
+                    <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
                   ))}
                 </ul>
+                <small className="view-detail archived-detail">View detail</small>
               </div>
             ))}
           </div>
-          <h1 className="section-title">Shared archived shopping lists</h1>
+          <h1 className="section-title">ARCHIVED SHARED SHOPPING LISTS</h1>
           <div className="lists">
             {archivedSharedLists.map((list) => (
               <div key={list.id} className="list-tile archived">
-                <h2 className="list-name">{list.name}</h2>
+                <div className="list-header">
+                  <h2 className="list-name archived-name">{list.name}</h2>
+                </div>
                 <ul className="list-items archived">
                   {list.items.map((item, index) => (
-                    <li key={index}><FaCheck className="check-icon" /> {item}</li>
+                    <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
                   ))}
                 </ul>
+                <small className="view-detail archived-detail">View detail</small>
               </div>
             ))}
           </div>
         </>
+      )}
+      {showDeleteDialog && (
+        <ListDeleteDialog
+          data={listToDelete}
+          onClose={() => setShowDeleteDialog(false)}
+          onDelete={handleDelete}
+        />
       )}
     </div>
   );

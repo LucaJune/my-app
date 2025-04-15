@@ -28,29 +28,32 @@
   font-size: 24px;
   color: #0b6d5c;
   font-family: 'Poppins', sans-serif;
-  margin: 20px 0;
+  margin: 25px 0;
+  text-align: left;
 }
 
 .lists {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 30px;
+  margin-bottom: 40px;
 }
 
 .list-tile {
   border: 1px solid #ccc;
-  padding: 20px;
-  width: 200px;
+  padding: 25px;
+  width: 300px;
   border-radius: 10px;
-  background-color: #308775;
+  background-color: #30877686;
   color: #0b6d5c;
   font-family: 'Poppins', sans-serif;
   position: relative;
+  text-align: left;
 }
 
 .list-tile.archived {
-  background-color: #FFA500; /* Oranžová barva */
+  background-color: #ffa60068;
 }
 
 .list-header {
@@ -63,6 +66,10 @@
   font-size: 18px;
   margin-bottom: 10px;
   color: #0b6d5c;
+}
+
+.list-name.archived-name {
+  color: #ff7700d2;
 }
 
 .list-items {
@@ -79,6 +86,10 @@
   margin-bottom: 5px;
 }
 
+.archived-item {
+  color: #ff7700d2;
+}
+
 .icons {
   display: flex;
   gap: 10px;
@@ -91,8 +102,7 @@
 .show-archived-button {
   margin: 20px 0;
   padding: 10px 20px;
-  background-color: #308775;
-  color: #fff;
+  color: #ff7700;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -104,6 +114,17 @@
 }
 
 .check-icon {
-  color: #0b6d5c;
+  color: #ff7700;
   margin-right: 5px;
+}
+
+.view-detail {
+  font-size: 12px;
+  color: #0b6d5c;
+  cursor: pointer;
+
+.modal-content {
+    font-family: 'Poppins', sans-serif;
+    
+}
 }

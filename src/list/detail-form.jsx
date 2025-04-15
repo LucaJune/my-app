@@ -17,7 +17,7 @@ function ListNameForm({ currentName, onSave, onClose }) {
     <Modal show={true} onHide={onClose} centered>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit you shopping list name</Modal.Title>
+          <Modal.Title>Edit your shopping list name</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
