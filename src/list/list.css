@@ -1,27 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 .list-container {
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Přemístí vše doprostřed stránky */
 }
 
 .add-list {
   display: flex;
-  align-items: center;
+  justify-content: center; /* Zarovná tlačítko vpravo */
+  width: 100%;
   margin-bottom: 20px;
+
 }
 
-.add-list input {
-  flex: 1;
+.add-list-button {
+  background-color: #0b6d5d8a;
+  color: #0b6d5c;
+  border: none;
   padding: 10px;
-  margin-right: 10px;
-  font-family: 'Poppins', sans-serif;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Zarovná ikonu a text vertikálně */
 }
 
-.add-icon {
-  cursor: pointer;
+.add-list-button .add-icon {
+  margin-right: 10px; /* Přidá mezeru mezi ikonou a textem */
 }
 
 .section-title {
@@ -35,7 +42,7 @@
 .lists {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center; /* Zarovná dlaždice doprostřed */
   gap: 30px;
   margin-bottom: 40px;
 }
@@ -120,11 +127,11 @@
 
 .view-detail {
   font-size: 12px;
-  color: #0b6d5c;
+  color: #013f35;
   cursor: pointer;
+  text-align: right; /* Zarovná text vpravo */
+}
 
 .modal-content {
-    font-family: 'Poppins', sans-serif;
-    
-}
+  font-family: 'Poppins', sans-serif;
 }

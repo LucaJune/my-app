@@ -3,6 +3,7 @@ import "./list.css";
 import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp, FaCheck } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ListDeleteDialog from "./list-delete.jsx"; // Import modálního okna
+import ListCreateForm from "./list-form-create.jsx"; // Import modálního okna pro vytvoření seznamu
 
 const List = () => {
   const [myLists, setMyLists] = useState([
@@ -22,14 +23,19 @@ const List = () => {
     { id: 8, name: "Archived Shared List 2", items: ["chips", "cookies", "candy"] },
     { id: 9, name: "Archived Shared List 3", items: ["flour", "sugar", "salt"] },
   ]);
-  const [newListName, setNewListName] = useState("");
   const [showArchived, setShowArchived] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [listToDelete, setListToDelete] = useState(null);
+  const [showAddList, setShowAddList] = useState(false); // Nový stav pro zobrazení pole pro přidání seznamu
 
   const handleListRemove = (id) => {
     const newLists = myLists.filter(list => list.id !== id);
     setMyLists(newLists);
+  };
+
+  const handleArchivedListRemove = (id) => {
+    const newArchivedLists = archivedMyLists.filter(list => list.id !== id);
+    setArchivedMyLists(newArchivedLists);
   };
 
   const handleListArchive = (id) => {
@@ -38,11 +44,10 @@ const List = () => {
     handleListRemove(id);
   };
 
-  const handleListAdd = () => {
-    if (newListName.trim()) {
+  const handleListAdd = ({ name, items }) => {
+    if (name.trim()) {
       const newId = myLists.length ? myLists[myLists.length - 1].id + 1 : 1;
-      setMyLists([...myLists, { id: newId, name: newListName, items: [] }]);
-      setNewListName("");
+      setMyLists([...myLists, { id: newId, name: name, items: items.map(item => item.name) }]);
     }
   };
 
@@ -53,18 +58,15 @@ const List = () => {
 
   const handleDelete = async (id) => {
     handleListRemove(id);
+    handleArchivedListRemove(id);
   };
 
   return (
     <div className="list-container">
       <div className="add-list">
-        <input
-          type="text"
-          value={newListName}
-          onChange={(e) => setNewListName(e.target.value)}
-          placeholder="Add new list"
-        />
-        <FaPlus className="add-icon" onClick={handleListAdd} />
+        <button className="add-list-button" onClick={() => setShowAddList(true)}>
+          <FaPlus className="add-icon" />Create a new shopping list
+        </button>
       </div>
       <h1 className="section-title">MY SHOPPING LISTS</h1>
       <div className="lists">
@@ -147,6 +149,12 @@ const List = () => {
           data={listToDelete}
           onClose={() => setShowDeleteDialog(false)}
           onDelete={handleDelete}
+        />
+      )}
+      {showAddList && (
+        <ListCreateForm
+          onSave={handleListAdd}
+          onClose={() => setShowAddList(false)}
         />
       )}
     </div>
