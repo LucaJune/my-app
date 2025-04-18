@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { FaPlus, FaTimes } from "react-icons/fa";
-import './detail.css';
+import './detail/detail.css';
 
 function ListCreateForm({ onSave, onClose }) {
   const [name, setName] = useState("");

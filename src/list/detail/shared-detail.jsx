@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import "./detail.css";
-import { FaPencilAlt, FaPlus, FaUsers, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import ListNameForm from "./detail-form.jsx";
-import UserForm from "../user/user-form.jsx";
+import { FaPlus, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Detail = () => {
-  const [listName, setListName] = useState("SHOPPING LIST 03/01/2025");
+const DetailShared = () => {
+  const [listName] = useState("Shared List");
   const [items, setItems] = useState([
-    { id: 1, name: "bread", checked: false },
-    { id: 2, name: "cheese", checked: false },
-    { id: 3, name: "milk", checked: false },
-    { id: 4, name: "eggs", checked: true },
-    { id: 5, name: "honey", checked: true },
+    { id: 1, name: "chicken", checked: false },
+    { id: 2, name: "fish", checked: false },
+    { id: 3, name: "beef", checked: false },
+    { id: 4, name: "pasta", checked: true },
+    { id: 5, name: "tomato", checked: true },
   ]);
   const [newItem, setNewItem] = useState("");
   const [showChecked, setShowChecked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
 
   const handleItemCheck = (id) => {
     const newItems = items.map(item => 
@@ -42,17 +38,10 @@ const Detail = () => {
   const uncheckedItems = items.filter(item => !item.checked);
   const checkedItems = items.filter(item => item.checked);
 
-  const handleUserModalClose = () => setShowUserModal(false);
-  const handleUserModalShow = () => setShowUserModal(true);
-
   return (
     <div className="detail-container">
       <div className="header">
         <h1 className="list-name">{listName}</h1>
-        <div className="icons">
-          <FaPencilAlt className="edit-icon" onClick={() => setShowModal(true)} />
-          <FaUsers className="user-icon" onClick={handleUserModalShow} />
-        </div>
       </div>
       <div className="add-item">
         <input
@@ -96,16 +85,8 @@ const Detail = () => {
           ))}
         </ul>
       )}
-      {showModal && (
-        <ListNameForm
-          currentName={listName}
-          onSave={(newName) => setListName(newName)}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-      <UserForm show={showUserModal} handleClose={handleUserModalClose} />
     </div>
   );
 };
 
-export default Detail;
+export default DetailShared;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
-import './detail.css';
+import './detail/detail.css';
 
 function ListDeleteDialog({ data, onDelete, onClose }) {
   const [errorState, setErrorState] = useState();

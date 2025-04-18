@@ -5,12 +5,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Přemístí vše doprostřed stránky */
+  justify-content: center;
 }
 
 .add-list {
   display: flex;
-  justify-content: center; /* Zarovná tlačítko vpravo */
+  justify-content: center;
   width: 100%;
   margin-bottom: 20px;
 
@@ -24,11 +24,11 @@
   border-radius: 5px;
   cursor: pointer;
   display: flex;
-  align-items: center; /* Zarovná ikonu a text vertikálně */
+  align-items: center;
 }
 
 .add-list-button .add-icon {
-  margin-right: 10px; /* Přidá mezeru mezi ikonou a textem */
+  margin-right: 10px;
 }
 
 .section-title {
@@ -42,7 +42,7 @@
 .lists {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Zarovná dlaždice doprostřed */
+  justify-content: center;
   gap: 30px;
   margin-bottom: 40px;
 }
@@ -127,9 +127,9 @@
 
 .view-detail {
   font-size: 12px;
-  color: #013f35;
+  color: #0b6d5c;
   cursor: pointer;
-  text-align: right; /* Zarovná text vpravo */
+  text-align: right;
 }
 
 .modal-content {

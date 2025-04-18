@@ -2,31 +2,32 @@ import React, { useState } from "react";
 import "./list.css";
 import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp, FaCheck } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ListDeleteDialog from "./list-delete.jsx"; // Import modálního okna
-import ListCreateForm from "./list-form-create.jsx"; // Import modálního okna pro vytvoření seznamu
+import { Link } from "react-router-dom";
+import ListDeleteDialog from "./list-delete.jsx";
+import ListCreateForm from "./list-form-create.jsx";
 
 const List = () => {
   const [myLists, setMyLists] = useState([
-    { id: 1, name: "Shopping List 1", items: ["milk", "eggs", "honey"] },
-    { id: 2, name: "Shopping List 2", items: ["bread", "cheese", "butter"] },
-    { id: 3, name: "Shopping List 3", items: ["apples", "bananas", "oranges"] },
+    { id: 1, name: "Shopping List", items: ["milk", "eggs", "honey"] },
+    { id: 2, name: "Shopping List", items: ["milk", "eggs", "honey"] },
+    { id: 3, name: "Shopping List", items: ["milk", "eggs", "honey"] },
   ]);
   const [sharedLists] = useState([
-    { id: 4, name: "Shared List 1", items: ["chicken", "fish", "beef"] },
+    { id: 4, name: "Shared List", items: ["chicken", "fish", "beef"] },
   ]);
   const [archivedMyLists, setArchivedMyLists] = useState([
-    { id: 5, name: "Archived My List 1", items: ["pasta", "rice", "beans"] },
-    { id: 6, name: "Archived My List 2", items: ["tomatoes", "cucumbers", "lettuce"] },
+    { id: 5, name: "Archived List", items: ["pasta", "rice", "beans"] },
+    { id: 6, name: "Archived List", items: ["pasta", "rice", "beans"] },
   ]);
   const [archivedSharedLists] = useState([
-    { id: 7, name: "Archived Shared List 1", items: ["soda", "juice", "water"] },
-    { id: 8, name: "Archived Shared List 2", items: ["chips", "cookies", "candy"] },
-    { id: 9, name: "Archived Shared List 3", items: ["flour", "sugar", "salt"] },
+    { id: 7, name: "Archived Shared List", items: ["soda", "juice", "water"] },
+    { id: 8, name: "Archived Shared List", items: ["chips", "cookies", "candy"] },
+    { id: 9, name: "Archived Shared List", items: ["flour", "sugar", "salt"] },
   ]);
   const [showArchived, setShowArchived] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [listToDelete, setListToDelete] = useState(null);
-  const [showAddList, setShowAddList] = useState(false); // Nový stav pro zobrazení pole pro přidání seznamu
+  const [showAddList, setShowAddList] = useState(false);
 
   const handleListRemove = (id) => {
     const newLists = myLists.filter(list => list.id !== id);
@@ -84,7 +85,7 @@ const List = () => {
                 <li key={index}>{item}</li>
               ))}
             </ul>
-            <small className="view-detail">View detail</small>
+            <Link to={`/DetailList/${list.id}`} className="view-detail">View detail</Link>
           </div>
         ))}
       </div>
@@ -100,7 +101,7 @@ const List = () => {
                 <li key={index}>{item}</li>
               ))}
             </ul>
-            <small className="view-detail">View detail</small>
+            <Link to={`/DetailShared/${list.id}`} className="view-detail">View detail</Link>
           </div>
         ))}
       </div>
@@ -122,7 +123,7 @@ const List = () => {
                     <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
                   ))}
                 </ul>
-                <small className="view-detail archived-detail">View detail</small>
+                <Link to={`/DetailArchived/${list.id}`} className="view-detail archived-detail">View detail</Link>
               </div>
             ))}
           </div>
@@ -138,7 +139,7 @@ const List = () => {
                     <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
                   ))}
                 </ul>
-                <small className="view-detail archived-detail">View detail</small>
+                <Link to={`/DetailArchivedShared/${list.id}`} className="view-detail archived-detail">View detail</Link>
               </div>
             ))}
           </div>
