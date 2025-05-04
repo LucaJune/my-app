@@ -3,14 +3,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
 import './detail/detail.css';
+import FetchHelper from "../fetch-helper"; // Import FetchHelper
 
-function ListDeleteDialog({ data, onDelete, onClose }) {
+function ListDeleteDialog({ data, onDelete, onClose, useMockData }) {
   const [errorState, setErrorState] = useState();
 
   const handleDelete = async () => {
     try {
-      await onDelete(data.id);
-      onClose();
+      const response = await FetchHelper.list.delete({ id: data.id }, useMockData);
+      if (response.ok) {
+        await onDelete(data.id);
+        onClose();
+      } else {
+        setErrorState({ message: `Failed to delete list: ${response.status}` });
+      }
     } catch (error) {
       setErrorState({ message: error.message });
     }

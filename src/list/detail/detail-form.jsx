@@ -3,14 +3,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import './detail.css';
+import FetchHelper from "../../fetch-helper"; // Import FetchHelper
 
-function ListNameForm({ currentName, onSave, onClose }) {
+function ListNameForm({ currentName, onSave, onClose, useMockData }) {
   const [name, setName] = useState(currentName);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(name);
-    onClose();
+    const response = await FetchHelper.list.update({ name }, useMockData);
+    if (response.ok) {
+      onSave(name);
+      onClose();
+    } else {
+      console.error("Failed to update list name:", response.status);
+    }
   };
 
   return (

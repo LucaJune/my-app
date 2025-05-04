@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./detail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import FetchHelper from "../../fetch-helper"; // Import FetchHelper
 
-const DetailArchivedShared = () => {
+const DetailArchivedShared = ({ useMockData }) => {
   const [listName] = useState("Archived Shared List");
-  const [items, setItems] = useState([
-    { id: 1, name: "soda", checked: true },
-    { id: 2, name: "juice", checked: true },
-    { id: 3, name: "water", checked: true },
-    { id: 4, name: "eggs", checked: true },
-    { id: 5, name: "honey", checked: true },
-  ]);
+  const [items, setItems] = useState([]);
 
-  const handleItemCheck = (id) => {
-    const newItems = items.map(item => 
-      item.id === id ? { ...item, checked: !item.checked } : item
-    );
-    setItems(newItems);
+  useEffect(() => {
+    const fetchItems = async () => {
+      const response = await FetchHelper.item.list(useMockData);
+      if (response.ok) {
+        // Ensure all items are checked
+        const checkedItems = response.data.map(item => ({ ...item, checked: true }));
+        setItems(checkedItems);
+      } else {
+        console.error("Failed to fetch items:", response.status);
+      }
+    };
+    fetchItems();
+  }, [useMockData]);
+
+  const handleItemCheck = () => {
+    alert("Archived items cannot be edited.");
   };
 
   return (
@@ -31,7 +37,8 @@ const DetailArchivedShared = () => {
               type="checkbox"
               className="custom-checkbox"
               checked={item.checked}
-              onChange={() => handleItemCheck(item.id)}
+              readOnly // Make the checkbox read-only
+              onClick={handleItemCheck} // Show alert on click
             />
             {item.name}
           </li>

@@ -1,33 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./list.css";
-import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp, FaCheck } from "react-icons/fa";
+import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp} from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import ListDeleteDialog from "./list-delete.jsx";
 import ListCreateForm from "./list-form-create.jsx";
+import FetchHelper from "../fetch-helper"; // Import FetchHelper
+import mockData from "../mockData"; // Import mockData
 
-const List = () => {
-  const [myLists, setMyLists] = useState([
-    { id: 1, name: "Shopping List", items: ["milk", "eggs", "honey"] },
-    { id: 2, name: "Shopping List", items: ["milk", "eggs", "honey"] },
-    { id: 3, name: "Shopping List", items: ["milk", "eggs", "honey"] },
-  ]);
-  const [sharedLists] = useState([
-    { id: 4, name: "Shared List", items: ["chicken", "fish", "beef"] },
-  ]);
-  const [archivedMyLists, setArchivedMyLists] = useState([
-    { id: 5, name: "Archived List", items: ["pasta", "rice", "beans"] },
-    { id: 6, name: "Archived List", items: ["pasta", "rice", "beans"] },
-  ]);
-  const [archivedSharedLists] = useState([
-    { id: 7, name: "Archived Shared List", items: ["soda", "juice", "water"] },
-    { id: 8, name: "Archived Shared List", items: ["chips", "cookies", "candy"] },
-    { id: 9, name: "Archived Shared List", items: ["flour", "sugar", "salt"] },
-  ]);
+const List = ({ useMockData }) => {
+  const [myLists, setMyLists] = useState([]);
+  const [sharedLists, setSharedLists] = useState([]);
+  const [archivedMyLists, setArchivedMyLists] = useState([]);
+  const [archivedSharedLists, setArchivedSharedLists] = useState([]);
   const [showArchived, setShowArchived] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [listToDelete, setListToDelete] = useState(null);
   const [showAddList, setShowAddList] = useState(false);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      let myListsResponse, sharedListsResponse, archivedMyListsResponse, archivedSharedListsResponse;
+
+      if (useMockData) {
+        myListsResponse = { ok: true, data: mockData["list/list"] };
+        sharedListsResponse = { ok: true, data: mockData["list/list"] };
+        archivedMyListsResponse = { ok: true, data: mockData["list/list"] };
+        archivedSharedListsResponse = { ok: true, data: mockData["list/list"] };
+      } else {
+        myListsResponse = await FetchHelper.list.list(null, useMockData);
+        sharedListsResponse = await FetchHelper.list.list(useMockData);
+        archivedMyListsResponse = await FetchHelper.list.list(null, useMockData);
+        archivedSharedListsResponse = await FetchHelper.list.list(useMockData);
+      }
+
+      if (myListsResponse.ok) setMyLists(myListsResponse.data);
+      if (sharedListsResponse.ok) setSharedLists(sharedListsResponse.data);
+      if (archivedMyListsResponse.ok) setArchivedMyLists(archivedMyListsResponse.data);
+      if (archivedSharedListsResponse.ok) setArchivedSharedLists(archivedSharedListsResponse.data);
+    };
+    fetchLists();
+  }, [useMockData]);
 
   const handleListRemove = (id) => {
     const newLists = myLists.filter(list => list.id !== id);
@@ -45,10 +58,10 @@ const List = () => {
     handleListRemove(id);
   };
 
-  const handleListAdd = ({ name, items }) => {
+  const handleListAdd = ({ name }) => {
     if (name.trim()) {
       const newId = myLists.length ? myLists[myLists.length - 1].id + 1 : 1;
-      setMyLists([...myLists, { id: newId, name: name, items: items.map(item => item.name) }]);
+      setMyLists([...myLists, { id: newId, name: name }]);
     }
   };
 
@@ -80,11 +93,6 @@ const List = () => {
                 <FaArchive className="archive-icon" onClick={() => handleListArchive(list.id)} />
               </div>
             </div>
-            <ul className="list-items">
-              {list.items.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
             <Link to={`/DetailList/${list.id}`} className="view-detail">View detail</Link>
           </div>
         ))}
@@ -96,11 +104,6 @@ const List = () => {
             <div className="list-header">
               <h2 className="list-name">{list.name}</h2>
             </div>
-            <ul className="list-items">
-              {list.items.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
             <Link to={`/DetailShared/${list.id}`} className="view-detail">View detail</Link>
           </div>
         ))}
@@ -118,11 +121,6 @@ const List = () => {
                   <h2 className="list-name archived-name">{list.name}</h2>
                   <FaTrash className="remove-icon" onClick={() => handleDeleteClick(list)} />
                 </div>
-                <ul className="list-items archived">
-                  {list.items.map((item, index) => (
-                    <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
-                  ))}
-                </ul>
                 <Link to={`/DetailArchived/${list.id}`} className="view-detail archived-detail">View detail</Link>
               </div>
             ))}
@@ -134,11 +132,6 @@ const List = () => {
                 <div className="list-header">
                   <h2 className="list-name archived-name">{list.name}</h2>
                 </div>
-                <ul className="list-items archived">
-                  {list.items.map((item, index) => (
-                    <li key={index}><FaCheck className="check-icon" /> <span className="archived-item">{item}</span></li>
-                  ))}
-                </ul>
                 <Link to={`/DetailArchivedShared/${list.id}`} className="view-detail archived-detail">View detail</Link>
               </div>
             ))}

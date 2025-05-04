@@ -1,36 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./detail.css";
 import { FaPlus, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import FetchHelper from "../../fetch-helper"; // Import FetchHelper
+import mockData from "../../mockData"; // Import mockData
 
-const DetailShared = () => {
+const DetailShared = ({ useMockData }) => {
   const [listName] = useState("Shared List");
-  const [items, setItems] = useState([
-    { id: 1, name: "chicken", checked: false },
-    { id: 2, name: "fish", checked: false },
-    { id: 3, name: "beef", checked: false },
-    { id: 4, name: "pasta", checked: true },
-    { id: 5, name: "tomato", checked: true },
-  ]);
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [showChecked, setShowChecked] = useState(false);
 
-  const handleItemCheck = (id) => {
+  useEffect(() => {
+    const fetchItems = async () => {
+      const response = await FetchHelper.item.list(useMockData);
+      if (response.ok) {
+        setItems(response.data);
+      } else {
+        console.error("Failed to fetch items:", response.status);
+      }
+    };
+    fetchItems();
+  }, [useMockData]);
+
+  const handleItemCheck = async (id) => {
     const newItems = items.map(item => 
       item.id === id ? { ...item, checked: !item.checked } : item
     );
     setItems(newItems);
+
+    const updatedItem = newItems.find(item => item.id === id);
+    const response = await FetchHelper.item.update(updatedItem, useMockData);
+    if (!response.ok) {
+      console.error("Failed to update item:", response.status);
+    }
   };
 
-  const handleItemRemove = (id) => {
-    const newItems = items.filter(item => item.id !== id);
-    setItems(newItems);
+  const handleItemRemove = async (id) => {
+    const response = await FetchHelper.item.delete({ id }, useMockData);
+    if (response.ok) {
+      const newItems = items.filter(item => item.id !== id);
+      setItems(newItems);
+    } else {
+      console.error("Failed to remove item:", response.status);
+    }
   };
 
-  const handleItemAdd = () => {
+  const handleItemAdd = async () => {
     if (newItem.trim()) {
-      const newId = items.length ? items[items.length - 1].id + 1 : 1;
-      setItems([...items, { id: newId, name: newItem, checked: false }]);
+      let newItemObj;
+      if (useMockData) {
+        newItemObj = mockData["item/create"];
+      } else {
+        newItemObj = { name: newItem, checked: false };
+        const response = await FetchHelper.item.create(newItemObj, useMockData);
+        if (response.ok) {
+          newItemObj = { ...newItemObj, id: response.data.id };
+        } else {
+          console.error("Failed to add item:", response.status);
+          return;
+        }
+      }
+      setItems([...items, newItemObj]);
       setNewItem("");
     }
   };

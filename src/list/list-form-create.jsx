@@ -4,29 +4,64 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { FaPlus, FaTimes } from "react-icons/fa";
 import './detail/detail.css';
+import FetchHelper from "../fetch-helper"; // Import FetchHelper
+import mockData from "../mockData"; // Import mockData
 
-function ListCreateForm({ onSave, onClose }) {
+function ListCreateForm({ onSave, onClose, useMockData }) {
   const [name, setName] = useState("");
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({ name, items, members });
+    let newList;
+    if (useMockData) {
+      newList = mockData["list/create"];
+    } else {
+      newList = { name, items, members };
+      const response = await FetchHelper.list.create(newList, useMockData);
+      if (response.ok) {
+        newList = { ...newList, id: response.data.id };
+      } else {
+        console.error("Failed to create list:", response.status);
+        return;
+      }
+    }
+    onSave(newList);
     onClose();
   };
 
-  const handleItemAdd = () => {
+  const handleItemAdd = async () => {
     if (newItem.trim()) {
-      const newId = items.length ? items[items.length - 1].id + 1 : 1;
-      setItems([...items, { id: newId, name: newItem }]);
+      let newItemData;
+      if (useMockData) {
+        newItemData = mockData["item/create"];
+      } else {
+        newItemData = { name: newItem };
+        const response = await FetchHelper.item.create(newItemData, useMockData);
+        if (response.ok) {
+          newItemData = { ...newItemData, id: response.data.id };
+        } else {
+          console.error("Failed to create item:", response.status);
+          return;
+        }
+      }
+      setItems([...items, newItemData]);
       setNewItem("");
     }
   };
 
-  const handleItemRemove = (id) => {
+  const handleItemRemove = async (id) => {
+    let response;
+    if (!useMockData) {
+      response = await FetchHelper.item.delete(id, useMockData);
+      if (!response.ok) {
+        console.error("Failed to delete item:", response.status);
+        return;
+      }
+    }
     const newItems = items.filter(item => item.id !== id);
     setItems(newItems);
   };
