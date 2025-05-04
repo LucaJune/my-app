@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import './detail.css';
-import FetchHelper from "../../fetch-helper"; // Import FetchHelper
+import FetchHelper from "../../fetch-helper";
 
 function ListNameForm({ currentName, onSave, onClose, useMockData }) {
   const [name, setName] = useState(currentName);

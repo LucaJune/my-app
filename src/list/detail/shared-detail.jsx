@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./detail.css";
 import { FaPlus, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import FetchHelper from "../../fetch-helper"; // Import FetchHelper
-import mockData from "../../mockData"; // Import mockData
+import FetchHelper from "../../fetch-helper";
+import mockData from "../../mockData";
 
 const DetailShared = ({ useMockData }) => {
   const [listName] = useState("Shared List");

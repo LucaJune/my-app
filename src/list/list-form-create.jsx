@@ -4,8 +4,8 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { FaPlus, FaTimes } from "react-icons/fa";
 import './detail/detail.css';
-import FetchHelper from "../fetch-helper"; // Import FetchHelper
-import mockData from "../mockData"; // Import mockData
+import FetchHelper from "../fetch-helper";
+import mockData from "../mockData";
 
 function ListCreateForm({ onSave, onClose, useMockData }) {
   const [name, setName] = useState("");

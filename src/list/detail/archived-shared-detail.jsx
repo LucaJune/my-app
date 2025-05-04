@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./detail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import FetchHelper from "../../fetch-helper"; // Import FetchHelper
+import FetchHelper from "../../fetch-helper";
 
 const DetailArchivedShared = ({ useMockData }) => {
   const [listName] = useState("Archived Shared List");
@@ -11,6 +11,7 @@ const DetailArchivedShared = ({ useMockData }) => {
     const fetchItems = async () => {
       const response = await FetchHelper.item.list(useMockData);
       if (response.ok) {
+        
         // Ensure all items are checked
         const checkedItems = response.data.map(item => ({ ...item, checked: true }));
         setItems(checkedItems);
@@ -37,8 +38,8 @@ const DetailArchivedShared = ({ useMockData }) => {
               type="checkbox"
               className="custom-checkbox"
               checked={item.checked}
-              readOnly // Make the checkbox read-only
-              onClick={handleItemCheck} // Show alert on click
+              readOnly 
+              onClick={handleItemCheck}
             />
             {item.name}
           </li>

@@ -4,7 +4,7 @@ import { FaPencilAlt, FaUsers } from "react-icons/fa";
 import ListNameForm from "./detail-form.jsx";
 import UserForm from "./user-form.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import FetchHelper from "../../fetch-helper"; // Import FetchHelper
+import FetchHelper from "../../fetch-helper"; 
 
 const DetailArchived = ({ useMockData }) => {
   const [listName, setListName] = useState("Archived List");
@@ -16,6 +16,7 @@ const DetailArchived = ({ useMockData }) => {
     const fetchItems = async () => {
       const response = await FetchHelper.item.list(useMockData);
       if (response.ok) {
+
         // Ensure all items are checked
         const checkedItems = response.data.map(item => ({ ...item, checked: true }));
         setItems(checkedItems);
@@ -48,7 +49,7 @@ const DetailArchived = ({ useMockData }) => {
               type="checkbox"
               className="custom-checkbox"
               checked={item.checked}
-              readOnly // Make the checkbox read-only
+              readOnly
               onClick={handleItemCheck} // Show alert on click
             />
             {item.name}

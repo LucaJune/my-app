@@ -6,10 +6,10 @@ import DetailShared from "./list/detail/shared-detail";
 import DetailArchived from "./list/detail/archived-detail";
 import DetailArchivedShared from "./list/detail/archived-shared-detail";
 import ShoppingList from "./list/list";
-import "./App.css"; // Import CSS file
+import "./App.css";
 
 function App() {
-  const [useMockData, setUseMockData] = useState(true); // Nastavení mockovacích dat jako výchozí
+  const [useMockData, setUseMockData] = useState(true);
 
   const handleCheckboxChange = () => {
     setUseMockData(!useMockData);

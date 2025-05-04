@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import ListDeleteDialog from "./list-delete.jsx";
 import ListCreateForm from "./list-form-create.jsx";
-import FetchHelper from "../fetch-helper"; // Import FetchHelper
-import mockData from "../mockData"; // Import mockData
+import FetchHelper from "../fetch-helper";
+import mockData from "../mockData";
 
 const List = ({ useMockData }) => {
   const [myLists, setMyLists] = useState([]);

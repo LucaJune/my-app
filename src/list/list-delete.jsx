@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
 import './detail/detail.css';
-import FetchHelper from "../fetch-helper"; // Import FetchHelper
+import FetchHelper from "../fetch-helper";
 
 function ListDeleteDialog({ data, onDelete, onClose, useMockData }) {
   const [errorState, setErrorState] = useState();

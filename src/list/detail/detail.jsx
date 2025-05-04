@@ -4,8 +4,8 @@ import { FaPencilAlt, FaPlus, FaUsers, FaTimes, FaChevronDown, FaChevronUp } fro
 import ListNameForm from "./detail-form.jsx";
 import UserForm from "./user-form.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import FetchHelper from "../../fetch-helper"; // Import FetchHelper
-import mockData from "../../mockData"; // Import mockData
+import FetchHelper from "../../fetch-helper";
+import mockData from "../../mockData";
 
 const Detail = ({ useMockData }) => {
   const [listName, setListName] = useState("Shopping List");
