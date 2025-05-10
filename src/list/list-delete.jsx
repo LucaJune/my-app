@@ -5,7 +5,7 @@ import Alert from 'react-bootstrap/Alert';
 import './detail/detail.css';
 import FetchHelper from "../fetch-helper";
 
-function ListDeleteDialog({ data, onDelete, onClose, useMockData }) {
+function ListDeleteDialog({ data, onDelete, onClose, useMockData, language, theme }) {
   const [errorState, setErrorState] = useState();
 
   const handleDelete = async () => {
@@ -22,23 +22,42 @@ function ListDeleteDialog({ data, onDelete, onClose, useMockData }) {
     }
   };
 
+  const texts = {
+    en: {
+      title: "Delete Shopping List",
+      body: `Do you really want to delete the shopping list ${data.name}?`,
+      close: "Close",
+      delete: "Delete",
+      error: "Failed to delete list"
+    },
+    cz: {
+      title: "Smazat nákupní seznam",
+      body: `Opravdu chcete smazat nákupní seznam ${data.name}?`,
+      close: "Zavřít",
+      delete: "Smazat",
+      error: "Nepodařilo se smazat seznam"
+    }
+  };
+
+  const t = language === "CZ" ? texts.cz : texts.en;
+
   return (
-    <Modal show={true} onHide={onClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Delete Shopping List</Modal.Title>
+    <Modal show={true} onHide={onClose} centered className={theme}>
+      <Modal.Header closeButton className={theme}>
+        <Modal.Title>{t.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={theme}>
         {!!errorState?.message ? (
-          <Alert variant="danger">{errorState.message}</Alert>
+          <Alert variant="danger">{t.error}: {errorState.message}</Alert>
         ) : null}
-        {`Do you really want to delete the shopping list ${data.name}?`}
+        {t.body}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={theme}>
         <Button variant="secondary" onClick={onClose}>
-          Close
+          {t.close}
         </Button>
         <Button variant="danger" onClick={handleDelete}>
-          Delete
+          {t.delete}
         </Button>
       </Modal.Footer>
     </Modal>

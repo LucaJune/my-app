@@ -8,14 +8,15 @@
   justify-content: center;
 }
 
+/* Add list section styling */
 .add-list {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
-
 }
 
+/* Add list button styling */
 .add-list-button {
   background-color: #0b6d5d8a;
   color: #0b6d5c;
@@ -31,6 +32,7 @@
   margin-right: 10px;
 }
 
+/* Section title styling */
 .section-title {
   font-size: 24px;
   color: #0b6d5c;
@@ -39,6 +41,7 @@
   text-align: left;
 }
 
+/* Lists container styling */
 .lists {
   display: flex;
   flex-wrap: wrap;
@@ -47,6 +50,7 @@
   margin-bottom: 40px;
 }
 
+/* List tile styling */
 .list-tile {
   border: 1px solid #ccc;
   padding: 25px;
@@ -63,12 +67,14 @@
   background-color: #ffa60068;
 }
 
+/* List header styling */
 .list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* List name styling */
 .list-name {
   font-size: 18px;
   margin-bottom: 10px;
@@ -79,6 +85,7 @@
   color: #ff7700d2;
 }
 
+/* List items styling */
 .list-items {
   list-style-type: disc;
   padding-left: 20px;
@@ -97,6 +104,7 @@
   color: #ff7700d2;
 }
 
+/* Icons styling */
 .icons {
   display: flex;
   gap: 10px;
@@ -106,6 +114,7 @@
   cursor: pointer;
 }
 
+/* Show archived button styling */
 .show-archived-button {
   margin: 20px 0;
   padding: 10px 20px;
@@ -125,6 +134,7 @@
   margin-right: 5px;
 }
 
+/* View detail link styling */
 .view-detail {
   font-size: 12px;
   color: #0b6d5c;
@@ -132,6 +142,80 @@
   text-align: right;
 }
 
+/* Modal content styling */
 .modal-content {
   font-family: 'Poppins', sans-serif;
+}
+
+/* Dark mode styles */
+.app-container.dark .list-container {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.app-container.dark .add-list-button {
+  background-color: #444444;
+  color: #ffffffae;
+}
+
+.app-container.dark .add-list-button:hover {
+  background-color: #222222;
+}
+
+.app-container.dark .section-title {
+  color: #ffffff;
+}
+
+.app-container.dark .list-tile {
+  background-color: #444444;
+  border-color: #555555;
+}
+
+.app-container.dark .list-tile.archived {
+  background-color: #555555;
+}
+
+.app-container.dark .list-name {
+  color: #ffffff;
+}
+
+.app-container.dark .list-name.archived-name {
+  color: #ffd3add2;
+}
+
+.app-container.dark .icons .remove-icon {
+  color: #ff0000;
+}
+
+.app-container.dark .icons .remove-icon:hover {
+  color: #970000;
+}
+
+.app-container.dark .icons .archive-icon {
+  color: #cccccc;
+}
+
+.app-container.dark .icons .archive-icon:hover {
+  color: #ffffff;
+}
+
+.app-container.dark .view-detail {
+  color: #cccccc;
+}
+
+.app-container.dark .view-detail:hover {
+  color: #ffffff;
+}
+
+.app-container.dark .show-archived-button {
+  background-color: #444444;
+  color: #ffffff;
+}
+
+.app-container.dark .show-archived-button:hover {
+  background-color: #222222;
+}
+
+.app-container.dark .arrow-icon {
+  color: #ffffff;
 }

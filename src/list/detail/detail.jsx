@@ -7,8 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchHelper from "../../fetch-helper";
 import mockData from "../../mockData";
 
-const Detail = ({ useMockData }) => {
-  const [listName, setListName] = useState("Shopping List");
+const Detail = ({ useMockData, language, theme }) => {
+  const [listName, setListName] = useState(language === "CZ" ? "Nákupní seznam" : "Shopping List");
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [showChecked, setShowChecked] = useState(false);
@@ -17,7 +17,14 @@ const Detail = ({ useMockData }) => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await FetchHelper.item.list(useMockData);
+      let response;
+      if (useMockData) {
+        const data = mockData[language.toLowerCase()];
+        response = { ok: true, data: data["item/list"] };
+      } else {
+        response = await FetchHelper.item.list(useMockData);
+      }
+
       if (response.ok) {
         setItems(response.data);
       } else {
@@ -25,7 +32,11 @@ const Detail = ({ useMockData }) => {
       }
     };
     fetchItems();
-  }, [useMockData]);
+  }, [useMockData, language]);
+
+  useEffect(() => {
+    setListName(language === "CZ" ? "Nákupní seznam" : "Shopping List");
+  }, [language]);
 
   const handleItemCheck = async (id) => {
     const newItems = items.map(item => 
@@ -54,7 +65,7 @@ const Detail = ({ useMockData }) => {
     if (newItem.trim()) {
       let newItemObj;
       if (useMockData) {
-        newItemObj = mockData["item/create"];
+        newItemObj = mockData[language.toLowerCase()]["item/create"];
       } else {
         newItemObj = { name: newItem, checked: false };
         const response = await FetchHelper.item.create(newItemObj, useMockData);
@@ -77,7 +88,7 @@ const Detail = ({ useMockData }) => {
   const handleUserModalShow = () => setShowUserModal(true);
 
   return (
-    <div className="detail-container">
+    <div className={`detail-container ${theme}`}>
       <div className="header">
         <h1 className="list-name">{listName}</h1>
         <div className="icons">
@@ -90,7 +101,7 @@ const Detail = ({ useMockData }) => {
           type="text"
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
-          placeholder="Add item"
+          placeholder={language === "CZ" ? "Přidat položku" : "Add item"}
         />
         <FaPlus className="add-icon" onClick={handleItemAdd} />
       </div>
@@ -109,7 +120,8 @@ const Detail = ({ useMockData }) => {
         ))}
       </ul>
       <button className="show-checked-button" onClick={() => setShowChecked(!showChecked)}>
-        {showChecked ? "Hide checked items" : "Show checked items"} {showChecked ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
+        {showChecked ? (language === "CZ" ? "Skrýt zaškrtnuté položky" : "Hide checked items") : (language === "CZ" ? "Zobrazit zaškrtnuté položky" : "Show checked items")} 
+        {showChecked ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
       </button>
       {showChecked && (
         <ul className="item-list">
@@ -132,9 +144,12 @@ const Detail = ({ useMockData }) => {
           currentName={listName}
           onSave={(newName) => setListName(newName)}
           onClose={() => setShowModal(false)}
+          useMockData={useMockData}
+          language={language}
+          theme={theme}
         />
       )}
-      <UserForm show={showUserModal} handleClose={handleUserModalClose} />
+      <UserForm show={showUserModal} handleClose={handleUserModalClose} language={language} theme={theme} />
     </div>
   );
 };

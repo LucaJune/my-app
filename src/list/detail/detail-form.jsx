@@ -4,13 +4,20 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import './detail.css';
 import FetchHelper from "../../fetch-helper";
+import mockData from "../../mockData";
 
-function ListNameForm({ currentName, onSave, onClose, useMockData }) {
+function ListNameForm({ currentName, onSave, onClose, useMockData, language, theme }) {
   const [name, setName] = useState(currentName);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await FetchHelper.list.update({ name }, useMockData);
+    let response;
+    if (useMockData) {
+      response = { ok: true, data: mockData[language.toLowerCase()]["list/update"] };
+    } else {
+      response = await FetchHelper.list.update({ name }, useMockData);
+    }
+
     if (response.ok) {
       onSave(name);
       onClose();
@@ -20,10 +27,10 @@ function ListNameForm({ currentName, onSave, onClose, useMockData }) {
   };
 
   return (
-    <Modal show={true} onHide={onClose} centered>
+    <Modal show={true} onHide={onClose} centered className={theme}>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit your shopping list name</Modal.Title>
+          <Modal.Title>{language === "CZ" ? "Upravit název nákupního seznamu" : "Edit your shopping list name"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
@@ -35,10 +42,10 @@ function ListNameForm({ currentName, onSave, onClose, useMockData }) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="dark" onClick={onClose}>
-            Close
+            {language === "CZ" ? "Zavřít" : "Close"}
           </Button>
           <Button variant="warning" type="submit">
-            Save Changes
+            {language === "CZ" ? "Uložit změny" : "Save Changes"}
           </Button>
         </Modal.Footer>
       </Form>

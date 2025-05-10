@@ -2,16 +2,23 @@ import React, { useState, useEffect } from "react";
 import "./detail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchHelper from "../../fetch-helper";
+import mockData from "../../mockData";
 
-const DetailArchivedShared = ({ useMockData }) => {
-  const [listName] = useState("Archived Shared List");
+const DetailArchivedShared = ({ useMockData, language, theme }) => {
+  const [listName, setListName] = useState(language === "CZ" ? "Archivovaný sdílený seznam" : "Archived Shared List");
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await FetchHelper.item.list(useMockData);
+      let response;
+      if (useMockData) {
+        const data = mockData[language.toLowerCase()];
+        response = { ok: true, data: data["item/list"] };
+      } else {
+        response = await FetchHelper.item.list(useMockData);
+      }
+
       if (response.ok) {
-        
         // Ensure all items are checked
         const checkedItems = response.data.map(item => ({ ...item, checked: true }));
         setItems(checkedItems);
@@ -20,14 +27,18 @@ const DetailArchivedShared = ({ useMockData }) => {
       }
     };
     fetchItems();
-  }, [useMockData]);
+  }, [useMockData, language]);
+
+  useEffect(() => {
+    setListName(language === "CZ" ? "Archivovaný sdílený seznam" : "Archived Shared List");
+  }, [language]);
 
   const handleItemCheck = () => {
-    alert("Archived items cannot be edited.");
+    alert(language === "CZ" ? "Archivované položky nelze upravovat." : "Archived items cannot be edited.");
   };
 
   return (
-    <div className="detail-container">
+    <div className={`detail-container ${theme}`}>
       <div className="header">
         <h1 className="list-name">{listName}</h1>
       </div>

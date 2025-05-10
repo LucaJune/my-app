@@ -7,18 +7,39 @@ import './detail/detail.css';
 import FetchHelper from "../fetch-helper";
 import mockData from "../mockData";
 
-function ListCreateForm({ onSave, onClose, useMockData }) {
+function ListCreateForm({ onSave, onClose, useMockData, language, theme }) {
   const [name, setName] = useState("");
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
 
+  const texts = {
+    en: {
+      createTitle: "Create New Shopping List",
+      enterListName: "Enter list name",
+      addItem: "Add item",
+      addNewItem: "Add new member",
+      close: "Close",
+      create: "Create"
+    },
+    cz: {
+      createTitle: "Vytvořit nový nákupní seznam",
+      enterListName: "Zadejte název seznamu",
+      addItem: "Přidat položku",
+      addNewItem: "Přidat nového člena",
+      close: "Zavřít",
+      create: "Vytvořit"
+    }
+  };
+
+  const t = language === "CZ" ? texts.cz : texts.en;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let newList;
     if (useMockData) {
-      newList = mockData["list/create"];
+      newList = mockData[language.toLowerCase()]["list/create"];
     } else {
       newList = { name, items, members };
       const response = await FetchHelper.list.create(newList, useMockData);
@@ -37,7 +58,7 @@ function ListCreateForm({ onSave, onClose, useMockData }) {
     if (newItem.trim()) {
       let newItemData;
       if (useMockData) {
-        newItemData = mockData["item/create"];
+        newItemData = mockData[language.toLowerCase()]["item/create"];
       } else {
         newItemData = { name: newItem };
         const response = await FetchHelper.item.create(newItemData, useMockData);
@@ -80,17 +101,17 @@ function ListCreateForm({ onSave, onClose, useMockData }) {
   };
 
   return (
-    <Modal show={true} onHide={onClose} centered>
+    <Modal show={true} onHide={onClose} centered className={theme}>
       <Form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create New Shopping List</Modal.Title>
+        <Modal.Header closeButton className={theme}>
+          <Modal.Title>{t.createTitle}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={theme}>
           <Form.Control
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter list name"
+            placeholder={t.enterListName}
             required
           />
           <div className="add-item">
@@ -98,7 +119,7 @@ function ListCreateForm({ onSave, onClose, useMockData }) {
               type="text"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Add item"
+              placeholder={t.addItem}
             />
             <FaPlus className="add-icon" onClick={handleItemAdd} />
           </div>
@@ -115,7 +136,7 @@ function ListCreateForm({ onSave, onClose, useMockData }) {
               type="text"
               value={newMember}
               onChange={(e) => setNewMember(e.target.value)}
-              placeholder="Add new member"
+              placeholder={t.addNewItem}
             />
             <FaPlus className="add-icon" onClick={handleMemberAdd} />
           </div>
@@ -128,12 +149,12 @@ function ListCreateForm({ onSave, onClose, useMockData }) {
             ))}
           </ul>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="dark" onClick={onClose}>
-            Close
+        <Modal.Footer className={theme}>
+          <Button variant="secondary" onClick={onClose}>
+            {t.close}
           </Button>
           <Button variant="warning" type="submit">
-            Create
+            {t.create}
           </Button>
         </Modal.Footer>
       </Form>

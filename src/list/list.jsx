@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./list.css";
-import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp} from "react-icons/fa";
+import { FaTrash, FaArchive, FaPlus, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import ListDeleteDialog from "./list-delete.jsx";
@@ -8,7 +8,7 @@ import ListCreateForm from "./list-form-create.jsx";
 import FetchHelper from "../fetch-helper";
 import mockData from "../mockData";
 
-const List = ({ useMockData }) => {
+const List = ({ useMockData, language, theme }) => {
   const [myLists, setMyLists] = useState([]);
   const [sharedLists, setSharedLists] = useState([]);
   const [archivedMyLists, setArchivedMyLists] = useState([]);
@@ -18,15 +18,41 @@ const List = ({ useMockData }) => {
   const [listToDelete, setListToDelete] = useState(null);
   const [showAddList, setShowAddList] = useState(false);
 
+  const texts = {
+    en: {
+      createList: "Create a new shopping list",
+      myLists: "MY SHOPPING LISTS",
+      sharedLists: "SHARED SHOPPING LISTS",
+      hideArchived: "Hide archived lists",
+      showArchived: "Show archived lists",
+      myArchivedLists: "MY ARCHIVED SHOPPING LISTS",
+      archivedSharedLists: "ARCHIVED SHARED SHOPPING LISTS",
+      viewDetail: "View detail"
+    },
+    cz: {
+      createList: "Vytvořit nový nákupní seznam",
+      myLists: "MOJE NÁKUPNÍ SEZNAMY",
+      sharedLists: "SDÍLENÉ NÁKUPNÍ SEZNAMY",
+      hideArchived: "Skrýt archivované seznamy",
+      showArchived: "Zobrazit archivované seznamy",
+      myArchivedLists: "MOJE ARCHIVOVANÉ NÁKUPNÍ SEZNAMY",
+      archivedSharedLists: "ARCHIVOVANÉ SDÍLENÉ NÁKUPNÍ SEZNAMY",
+      viewDetail: "Zobrazit detail"
+    }
+  };
+
+  const t = language === "CZ" ? texts.cz : texts.en;
+
   useEffect(() => {
     const fetchLists = async () => {
       let myListsResponse, sharedListsResponse, archivedMyListsResponse, archivedSharedListsResponse;
 
       if (useMockData) {
-        myListsResponse = { ok: true, data: mockData["list/list"] };
-        sharedListsResponse = { ok: true, data: mockData["list/list"] };
-        archivedMyListsResponse = { ok: true, data: mockData["list/list"] };
-        archivedSharedListsResponse = { ok: true, data: mockData["list/list"] };
+        const data = mockData[language.toLowerCase()];
+        myListsResponse = { ok: true, data: data["list/list"] };
+        sharedListsResponse = { ok: true, data: data["list/list"] };
+        archivedMyListsResponse = { ok: true, data: data["list/list"] };
+        archivedSharedListsResponse = { ok: true, data: data["list/list"] };
       } else {
         myListsResponse = await FetchHelper.list.list(null, useMockData);
         sharedListsResponse = await FetchHelper.list.list(useMockData);
@@ -40,7 +66,7 @@ const List = ({ useMockData }) => {
       if (archivedSharedListsResponse.ok) setArchivedSharedLists(archivedSharedListsResponse.data);
     };
     fetchLists();
-  }, [useMockData]);
+  }, [useMockData, language]);
 
   const handleListRemove = (id) => {
     const newLists = myLists.filter(list => list.id !== id);
@@ -76,13 +102,13 @@ const List = ({ useMockData }) => {
   };
 
   return (
-    <div className="list-container">
+    <div className={`list-container ${theme}`}>
       <div className="add-list">
         <button className="add-list-button" onClick={() => setShowAddList(true)}>
-          <FaPlus className="add-icon" />Create a new shopping list
+          <FaPlus className="add-icon" />{t.createList}
         </button>
       </div>
-      <h1 className="section-title">MY SHOPPING LISTS</h1>
+      <h1 className="section-title">{t.myLists}</h1>
       <div className="lists">
         {myLists.map((list) => (
           <div key={list.id} className="list-tile">
@@ -93,27 +119,27 @@ const List = ({ useMockData }) => {
                 <FaArchive className="archive-icon" onClick={() => handleListArchive(list.id)} />
               </div>
             </div>
-            <Link to={`/DetailList/${list.id}`} className="view-detail">View detail</Link>
+            <Link to={`/DetailList/${list.id}`} className="view-detail">{t.viewDetail}</Link>
           </div>
         ))}
       </div>
-      <h1 className="section-title">SHARED SHOPPING LISTS</h1>
+      <h1 className="section-title">{t.sharedLists}</h1>
       <div className="lists">
         {sharedLists.map((list) => (
           <div key={list.id} className="list-tile">
             <div className="list-header">
               <h2 className="list-name">{list.name}</h2>
             </div>
-            <Link to={`/DetailShared/${list.id}`} className="view-detail">View detail</Link>
+            <Link to={`/DetailShared/${list.id}`} className="view-detail">{t.viewDetail}</Link>
           </div>
         ))}
       </div>
       <button className="show-archived-button" onClick={() => setShowArchived(!showArchived)}>
-        {showArchived ? "Hide archived lists" : "Show archived lists"} {showArchived ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
+        {showArchived ? t.hideArchived : t.showArchived} {showArchived ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
       </button>
       {showArchived && (
         <>
-          <h1 className="section-title">MY ARCHIVED SHOPPING LISTS</h1>
+          <h1 className="section-title">{t.myArchivedLists}</h1>
           <div className="lists">
             {archivedMyLists.map((list) => (
               <div key={list.id} className="list-tile archived">
@@ -121,18 +147,18 @@ const List = ({ useMockData }) => {
                   <h2 className="list-name archived-name">{list.name}</h2>
                   <FaTrash className="remove-icon" onClick={() => handleDeleteClick(list)} />
                 </div>
-                <Link to={`/DetailArchived/${list.id}`} className="view-detail archived-detail">View detail</Link>
+                <Link to={`/DetailArchived/${list.id}`} className="view-detail archived-detail">{t.viewDetail}</Link>
               </div>
             ))}
           </div>
-          <h1 className="section-title">ARCHIVED SHARED SHOPPING LISTS</h1>
+          <h1 className="section-title">{t.archivedSharedLists}</h1>
           <div className="lists">
             {archivedSharedLists.map((list) => (
               <div key={list.id} className="list-tile archived">
                 <div className="list-header">
                   <h2 className="list-name archived-name">{list.name}</h2>
                 </div>
-                <Link to={`/DetailArchivedShared/${list.id}`} className="view-detail archived-detail">View detail</Link>
+                <Link to={`/DetailArchivedShared/${list.id}`} className="view-detail archived-detail">{t.viewDetail}</Link>
               </div>
             ))}
           </div>
@@ -143,12 +169,18 @@ const List = ({ useMockData }) => {
           data={listToDelete}
           onClose={() => setShowDeleteDialog(false)}
           onDelete={handleDelete}
+          useMockData={useMockData}
+          language={language}
+          theme={theme}
         />
       )}
       {showAddList && (
         <ListCreateForm
           onSave={handleListAdd}
           onClose={() => setShowAddList(false)}
+          useMockData={useMockData}
+          language={language}
+          theme={theme}
         />
       )}
     </div>

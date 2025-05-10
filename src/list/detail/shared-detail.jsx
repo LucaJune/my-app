@@ -5,15 +5,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchHelper from "../../fetch-helper";
 import mockData from "../../mockData";
 
-const DetailShared = ({ useMockData }) => {
-  const [listName] = useState("Shared List");
+const DetailShared = ({ useMockData, language, theme }) => {
+  const [listName, setListName] = useState(language === "CZ" ? "Sdílený seznam" : "Shared List");
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [showChecked, setShowChecked] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await FetchHelper.item.list(useMockData);
+      let response;
+      if (useMockData) {
+        const data = mockData[language.toLowerCase()];
+        response = { ok: true, data: data["item/list"] };
+      } else {
+        response = await FetchHelper.item.list(useMockData);
+      }
+
       if (response.ok) {
         setItems(response.data);
       } else {
@@ -21,7 +28,11 @@ const DetailShared = ({ useMockData }) => {
       }
     };
     fetchItems();
-  }, [useMockData]);
+  }, [useMockData, language]);
+
+  useEffect(() => {
+    setListName(language === "CZ" ? "Sdílený seznam" : "Shared List");
+  }, [language]);
 
   const handleItemCheck = async (id) => {
     const newItems = items.map(item => 
@@ -50,7 +61,7 @@ const DetailShared = ({ useMockData }) => {
     if (newItem.trim()) {
       let newItemObj;
       if (useMockData) {
-        newItemObj = mockData["item/create"];
+        newItemObj = mockData[language.toLowerCase()]["item/create"];
       } else {
         newItemObj = { name: newItem, checked: false };
         const response = await FetchHelper.item.create(newItemObj, useMockData);
@@ -70,7 +81,7 @@ const DetailShared = ({ useMockData }) => {
   const checkedItems = items.filter(item => item.checked);
 
   return (
-    <div className="detail-container">
+    <div className={`detail-container ${theme}`}>
       <div className="header">
         <h1 className="list-name">{listName}</h1>
       </div>
@@ -79,7 +90,7 @@ const DetailShared = ({ useMockData }) => {
           type="text"
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
-          placeholder="Add item"
+          placeholder={language === "CZ" ? "Přidat položku" : "Add item"}
         />
         <FaPlus className="add-icon" onClick={handleItemAdd} />
       </div>
@@ -98,7 +109,8 @@ const DetailShared = ({ useMockData }) => {
         ))}
       </ul>
       <button className="show-checked-button" onClick={() => setShowChecked(!showChecked)}>
-        {showChecked ? "Hide checked items" : "Show checked items"} {showChecked ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
+        {showChecked ? (language === "CZ" ? "Skrýt zaškrtnuté položky" : "Hide checked items") : (language === "CZ" ? "Zobrazit zaškrtnuté položky" : "Show checked items")} 
+        {showChecked ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
       </button>
       {showChecked && (
         <ul className="item-list">
